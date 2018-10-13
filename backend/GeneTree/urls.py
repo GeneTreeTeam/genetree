@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^logout/',views.logout,name="log"),
     url(r'^signUp/',views.signUp,name="signup"),
     url(r'^postsignup/',views.postSignUp,name="postsignup"),
-
+    url(r'^forget/',views.forget,name="forget"),
+  	url(r'^postforget/',views.recover,name="recoverAttempt"),
 ]

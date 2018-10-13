@@ -33,6 +33,9 @@ def postSign(request):
 def signUp(request):
 	return render(request,"signUp.html")
 
+def forget(request):
+	return render(request,"forgot.html")
+
 def logout(request):
 	auth.logout(request)
 	return render(request,'home.html')
@@ -54,3 +57,12 @@ def postSignUp(request):
 
 	database.child("users").child(uid).child("details").set(data)
 	return render(request,"home.html")
+
+def recover(request):
+	email = request.POST.get('email') 
+	passw = "blank"
+	try:
+		user= authe.create_user_with_email_and_password(email,passw)
+	except:
+		message="Account does not, please check email"
+		return render(request,'forgot.html',{"mesg":message})

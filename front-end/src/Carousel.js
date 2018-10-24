@@ -1,27 +1,63 @@
-import React from 'react';
-import { UncontrolledCarousel } from 'reactstrap';
+import React, { Component } from 'react';
+import  {Carousel, CarouselCaption, CarouselInner, CarouselItem, View, Mask, Container } from 'mdbreact';
 
-const items = [
-    {
-        src: 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa1d%20text%20%7B%20fill%3A%23555%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa1d%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22285.921875%22%20y%3D%22218.3%22%3EFirst%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E',
-        altText: 'Slide 1',
-        caption: 'Slide 1',
-        header: 'Slide 1 Header'
-    },
-    {
-        src: 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa20%20text%20%7B%20fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa20%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23666%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22247.3203125%22%20y%3D%22218.3%22%3ESecond%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E',
-        altText: 'Slide 2',
-        caption: 'Slide 2',
-        header: 'Slide 2 Header'
-    },
-    {
-        src: 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa21%20text%20%7B%20fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa21%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23555%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22277%22%20y%3D%22218.3%22%3EThird%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E',
-        altText: 'Slide 3',
-        caption: 'Slide 3',
-        header: 'Slide 3 Header'
+class CarouselPage extends Component {
+    render(){
+        return(
+            <Container>
+                <h4 className="carousel-indicators" />
+                <Carousel
+                    activeItem={1}
+                    length={4}
+                    showControls={true}
+                    showIndicators={true}
+                    className="z-depth-1">
+                    <CarouselInner>
+                        <CarouselItem itemId="1">
+                            <View>
+                                <img className="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(68).jpg" alt="First slide" />
+                                <Mask overlay="black-light"></Mask>
+                            </View>
+                            <CarouselCaption>
+                                <h3 className="h3-responsive">Light mask</h3>
+                                <p>First text</p>
+                            </CarouselCaption>
+                        </CarouselItem>
+                        <CarouselItem itemId="2">
+                            <View>
+                                <img className="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(99).jpg" alt="Second slide" />
+                                <Mask overlay="black-strong"></Mask>
+                            </View>
+                            <CarouselCaption>
+                                <h3 className="h3-responsive">Strong mask</h3>
+                                <p>Second text</p>
+                            </CarouselCaption>
+                        </CarouselItem>
+                        <CarouselItem itemId="3">
+                            <View>
+                                <img className="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(17).jpg" alt="Third slide" />
+                                <Mask overlay="black-slight"></Mask>
+                            </View>
+                            <CarouselCaption>
+                                <h3 className="h3-responsive">Slight mask</h3>
+                                <p>Third text</p>
+                            </CarouselCaption>
+                        </CarouselItem>
+                        <CarouselItem itemId="4">
+                            <View>
+                                <img className="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20%28143%29.jpg" alt="Mattonit's item" />
+                                <Mask overlay="black-light"></Mask>
+                            </View>
+                            <CarouselCaption>
+                                <h3 className="h3-responsive">Sopot Beach</h3>
+                                <p>Fouth text</p>
+                            </CarouselCaption>
+                        </CarouselItem>
+                    </CarouselInner>
+                </Carousel>
+            </Container>
+        );
     }
-];
+}
 
-const Example = () => <UncontrolledCarousel items={items} />;
-
-export default Example;
+export default CarouselPage;

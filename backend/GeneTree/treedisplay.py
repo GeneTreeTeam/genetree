@@ -1,5 +1,21 @@
+from person import Person
 class TreeDisplay():
-	childrenNode = []
-
-	def displayChildren(self):
-		
+	if __name__ == "__main__":
+		person1 = Person()
+		person2 = Person()
+		person3 = Person()
+		person4 = Person()
+		person5 = Person()
+		person6 = Person()
+		person1.assignName("Betty")
+		person2.assignName("Martha")
+		person3.assignName("Bill")
+		person4.assignName("Gill")
+		person5.assignName("Jenny")
+		person6.assignName("Jay")
+		person1.assignMother(person2)
+		person1.assignFather(person3)
+		person2.assignFather(person4)
+		person2.assignMother(person5)
+		person3.assignFather(person6)
+		person1.displaySiblings()

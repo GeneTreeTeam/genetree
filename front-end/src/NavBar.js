@@ -30,10 +30,39 @@ export default class Example extends React.Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <NavbarBrand href="/">GeneTree</NavbarBrand>
+
+
+                    <NavbarBrand href="#">
+                        <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" className="d-inline-block align-top"/>
+                         GeneTree
+                    </NavbarBrand>
+
+                    <Nav className="bg-light">
+                        <NavItem>
+                            <NavLink href="/components/">My GeneTree</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/components/">Gene Analyze</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/components">Payment</NavLink>
+                        </NavItem>
+                    </Nav>
+
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
+
+                            <NavItem>
+                                <form className="form-inline my-2 my-lg-0">
+
+                                    <input className="form-control mr-sm-2"   placeholder="Search..."
+                                           aria-label="Search"/>
+                                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search
+                                        </button>
+                                </form>
+                            </NavItem>
+
                             <NavItem>
                                 <NavLink href="/components/">Sign Up</NavLink>
                             </NavItem>

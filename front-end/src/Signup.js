@@ -1,15 +1,23 @@
 import React from 'react';
 import { Container, Row, Col, Input, Button, Fa, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact';
-import {NavbarNav} from "./NarbarFeatures";
+import NarbarFeatures from "./NarbarFeatures";
 import FormsPage2 from "./Login";
-import Link from "react-router-dom/es/Link";
+import { Link } from 'react-router-dom';
+
+import {firebaseApp} from "./firebase";
+
 
 class FormsPage1 extends React.Component  {
 
     constructor(props) {
         super(props);
         this.state = {
-            modal: false
+            modal: false,
+            email: '',
+            password: '',
+            error: {
+                message: ''
+            }
         }
         this.toggle = this.toggle.bind(this);
     }
@@ -18,6 +26,15 @@ class FormsPage1 extends React.Component  {
         this.setState({
             modal: !this.state.modal
         });
+    }
+
+    SignUp(){
+        console.log('this.state', this.state);
+        const {email, password} = this.state;
+        firebaseApp.auth().createUserWithEmailAndPassword(email,password)
+            .catch(error => {
+                this.setState({error})
+            })
     }
 
     render() {
@@ -39,11 +56,16 @@ class FormsPage1 extends React.Component  {
                                 <Input size="sm" label="Your name" icon="user" group type="text"
                                        validate error="wrong" success="right"/>
                                 <Input size="sm" label="Your email" icon="envelope" group type="email"
-                                       validate error="wrong" success="right"/>
+                                       validate error="wrong" success="right"
+                                       onChange ={event => this.setState({email: event.target.value})}
+                                />
                                 <Input size="sm" label="Your password" icon="lock" group type="password"
-                                       validate error="wrong" success="right"/>
+                                       validate error="wrong" success="right"
+                                />
                                 <Input size="sm" label="Confirm your password" icon="exclamation-triangle"
-                                       group type="password" validate error="wrong" success="right"/>
+                                       group type="password" validate error="wrong" success="right"
+                                       onChange ={event => this.setState({password: event.target.value})}
+                                />
 
                                 <div className="form-check my-4">
                                     <input className="form-check-input" type="checkbox" id="defaultCheck12" />
@@ -53,14 +75,19 @@ class FormsPage1 extends React.Component  {
 
                                 <div className="text-center mb-3">
                                         <Button color="btn btn-pink btn-block btn-rounded z-depth-1"
-                                                rounded type="button" className="btn-block z-depth-1">Sign Up</Button>
+                                                rounded type="button" className="btn-block z-depth-1"
+
+                                                onClick={() =>
+                                                    this.SignUp()                                                }
+                                        >Sign Up</Button>
                                 </div>
+                                <div>{this.state.error.message}</div>
                             </ModalBody>
 
                             <ModalFooter className="mx-5 pt-3 mb-1">
                                 <Col md="12">
                                     <p className="font-small grey-text d-flex justify-content-center">Have an account?
-                                        <a href="<FormsPage2/>" className="blue-text ml-1 font-weight-bold"> Log In </a>
+                                        <div><Link to={'/login'}>Login</Link></div>
                                     </p>
                                 </Col>
                             </ModalFooter>

@@ -1,15 +1,23 @@
 import React from 'react';
 import { Container, Row, Col, Input, Button, Fa, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact';
-import {NavbarNav} from "./NarbarFeatures";
+import NarbarFeatures from "./NarbarFeatures";
+import { Route,Link } from 'react-router-dom'
+
+import {firebaseApp} from "./firebase";
 import FormsPage1 from "./Signup";
-import FormsPage3 from "./Forgotpassword";
+
 
 class FormsPage2 extends React.Component  {
 
     constructor(props) {
         super(props);
         this.state = {
-            modal: false
+            modal: false,
+            email: '',
+            password: '',
+            error: {
+                message:''
+            }
         }
         this.toggle = this.toggle.bind(this);
     }
@@ -18,6 +26,15 @@ class FormsPage2 extends React.Component  {
         this.setState({
             modal: !this.state.modal
         });
+    }
+
+    Login(){
+        console.log('this.state', this.state);
+        const {email, password} = this.state;
+        firebaseApp.auth().signInWithEmailAndPassword(email,password)
+            .catch(error => {
+                this.setState({error})
+            })
     }
 
     render() {
@@ -36,8 +53,14 @@ class FormsPage2 extends React.Component  {
                             </div>
 
                             <ModalBody className="grey-text">
-                                <Input size="sm" label="Your email" icon="envelope" group type="email" validate error="wrong" success="right"/>
-                                <Input size="sm" label="Enter password" icon="lock" group type="password" validate error="wrong" success="right"/>
+                                <Input
+                                    size="sm" label="Your email" icon="envelope" group type="email" validate error="wrong" success="right"
+                                    onChange = {event => this.setState({email: event.target.value})}
+                                />
+                                <Input
+                                    size="sm" label="Enter password" icon="lock" group type="password" validate error="wrong" success="right"
+                                    onChange = {event => this.setState({password: event.target.value})}
+                                />
 
                                 <p className="font-small blue-text d-flex justify-content-end pb-3">
                                     <a href="/Forgotpassword.js" className="blue-text ml-1">Forgot Password?</a>
@@ -46,18 +69,21 @@ class FormsPage2 extends React.Component  {
 
                                 <div className="text-center mb-3">
                                         <Button color="btn btn-pink btn-block btn-rounded z-depth-1"
-                                                rounded type="button" className="btn-block z-depth-1">Log In</Button>
+                                                rounded type="button" className="btn-block z-depth-1"
+                                        onClick={() => this.Login()}
+                                        >Log In</Button>
                                 </div>
+                                <div>{this.state.error.message}</div>
                             </ModalBody>
 
                             <ModalFooter className="mx-5 pt-3 mb-1">
                                 <Col md="12">
                                     <p className="font-small grey-text d-flex justify-content-center">Don't have an account?
-                                        <a href="./Signup.js" data-toggle="modal" data-target="modalSignup" data-dismiss="modal"
-                                           className="blue-text ml-1 font-weight-bold"> Sign Up</a></p>
+                                        <div><Link to={'/register'}>Sign Up</Link></div>
+                                        </p>
                                 </Col>
                             </ModalFooter>
-
+                            <div><Link to={'/register'}>Sign Up</Link></div>
                         </Modal>
                     </Col>
                 </Row>

@@ -16,7 +16,7 @@ class Person():
 		'comment':[],
 		'isAccount': False,
 ###		'children':[],
-		'uniqueId': 0,
+		'uniqueId': random.choice(range(1, 100)),
 		'gender':0, ### 0 is Male, 1 is Female
 #		'matchmaker': None,
 		'ethnicity':"",
@@ -29,7 +29,8 @@ class Person():
 		self.userData['dob'] = datetime(year, month, day)
 	def getName(self):
 		return self.userData['name']
-
+	def getSurname(self):
+		return self.userData['surname']
 	def getMom(self):
 		return self.userData['mother']
 
@@ -44,6 +45,9 @@ class Person():
 
 	def assignName(self,nameNew):
 		self.userData['name'] = nameNew
+
+	def assignsurName(self,surnameNew):
+		self.userData['surname'] = surnameNew
 
 	def assignFather(self,fatherNew):
 		self.userData['father'] = fatherNew
@@ -87,25 +91,38 @@ class Person():
 		self.userData['comment'].append(commentNew)
 
 	def displaySiblings(self):
+		print("hello")
+		print(self.hasFather())
+		print(self.hasMother())
 		siblings = set()
 		if self.hasFather() is True:
 			dad = self.userData['father']
 		#	dadsKids = dad.userData['children']
 			#for item in dadsKids:
-			siblings.add(dad)
+			#siblings.add(dad)
 			dad.displaySiblings()
+			print("Father of " + self.userData['name'] + " is " + str(dad))
 
 		if self.hasMother() is True:
 			mom = self.userData['mother']
 			#momsKids = mom.userData['children']
 #			for item in momsKids:
-			siblings.add(mom)
+	#		siblings.add(mom)
 			mom.displaySiblings()
-		print(self.getName() + " is ")
-		for item in siblings:
-			print(item.userData['name'] + " " )
-		
-		
+			print("Mother of " + self.userData['name'] + " is " + str(mom))
+		if self.hasFather() is False and self.hasMother() is False:
+			print("Why")
+			print(str(self) + " has no parents.")
+#		if len(siblings) == 0:
+#			print(str(self) + "'s parents are non existent")
+#		else:
+#			print(str(self) + "'s parents are", end=" ")
+#			for item in siblings:
+#				print(item, end=" ")
+#		print()
+
+	def __str__(self):
+		return self.userData['name'] + " " + self.userData['dob'].strftime('%m/%d/%Y') + " " + str(self.userData['uniqueId'])
 #	def marriage(self, differentPerson):
 #		newFam = family(self,differentPerson)
 #		for child in self.userData['children']:

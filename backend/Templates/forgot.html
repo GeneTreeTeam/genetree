@@ -1,0 +1,22 @@
+{% if mesg %}
+<script>
+  alert('{{ mesg }}');
+</script>
+
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> Forgot Password </title>
+</head>
+<body>
+
+  <form action="/postforget/" method="post">
+	{% csrf_token %}
+    Email :
+    <input type="email" name="email"><br><br>
+    <input type="submit" value="Reset Password">
+  </form>
+  {{e}}
+</body>

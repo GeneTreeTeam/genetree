@@ -15,13 +15,16 @@ import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
 import{Router, Route, browserHistory} from 'react-router';
+import AppAfterSignIn from "./AppAfterSignIn";
 
 
 firebaseApp.auth().onAuthStateChanged(user => {
     if(user){
         console.log('user signed in or up', user);
+        browserHistory.push('/app2');
     } else{
         console.log('user has signed put or still needs to sign in');
+        browserHistory.replace('/app' );
     }
 })
 
@@ -30,14 +33,14 @@ firebaseApp.auth().onAuthStateChanged(user => {
 
 ReactDOM.render(
     <Router path="/app" history={browserHistory}>
-        <div>
-            <Route path = "/app" component ={App}/>
+            <Route path = "/app" component = {App}/>
+            <Route path = "/app2" component={AppAfterSignIn}/>
             <Route path ="/login" component = {FormsPage2}/>
             <Route path ="/register" component = {FormsPage1}/>
 
-        </div>
 
-    </Router>, document.getElementById('root'));
+    </Router>, document.getElementById('root')
+)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

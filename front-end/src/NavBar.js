@@ -1,79 +1,104 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-    Collapse,
     Navbar,
-    NavbarToggler,
     NavbarBrand,
-    Nav,
+    NavbarNav,
+    NavbarToggler,
+    Collapse,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
+    Dropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem } from 'reactstrap';
+    DropdownItem } from 'mdbreact';
 
-export default class Example extends React.Component {
+
+import { BrowserRouter as Router } from 'react-router-dom';
+import {firebaseApp} from "./firebase";
+
+
+export default class Narbar extends Component {
     constructor(props) {
         super(props);
-
-        this.toggle = this.toggle.bind(this);
         this.state = {
-            isOpen: false
+            collapse: false,
+            isWideEnough: false,
         };
+        this.onClick = this.onClick.bind(this);
     }
-    toggle() {
+
+    onClick(){
         this.setState({
-            isOpen: !this.state.isOpen
+            collapse: !this.state.collapse,
         });
     }
+
+    signOut() {
+        firebaseApp.auth().signOut();
+    }
+
     render() {
         return (
-            <div>
-                <Navbar color="light" light expand="md">
+            <Router>
+                <Navbar color="unique-color-dark" dark expand="md" scrolling>
 
-
-                    <NavbarBrand href="#">
-                        <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" className="d-inline-block align-top"/>
-                         GeneTree
+                    <NavbarBrand href="/">
+                        <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png"  height="30" className="d-inline-block align-top"/>
+                        <strong>GeneTree</strong>
                     </NavbarBrand>
 
-                    <Nav className="bg-light">
-                        <NavItem>
-                            <NavLink href="/components/">My GeneTree</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/components/">Gene Analyze</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/components">Payment</NavLink>
-                        </NavItem>
-                    </Nav>
+                    { !this.state.isWideEnough && <NavbarToggler onClick = { this.onClick } />}
+                    <Collapse isOpen = { this.state.collapse } navbar>
 
-                    <NavbarToggler onClick={this.toggle} />
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
+                        <NavbarNav left>
+                            <NavItem active>
+                                <NavLink to="#">Home</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to="#">Analysis</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to="#">Payment</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <Dropdown>
+                                    <DropdownToggle nav caret>Others</DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem href="#">Features</DropdownItem>
+                                        <DropdownItem href="#">Pricing</DropdownItem>
+                                        <DropdownItem href="#">Options</DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </NavItem>
+                        </NavbarNav>
 
+                        <NavbarNav right>
                             <NavItem>
                                 <form className="form-inline my-2 my-lg-0">
-
-                                    <input className="form-control mr-sm-2"   placeholder="Search..."
-                                           aria-label="Search"/>
-                                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search
-                                        </button>
+                                    <input className="form-control mr-sm-2" type="text"
+                                           placeholder="Search..." aria-label="Search"/>
+                                    <button className="btn-outline-blue-grey my-2 my-sm-0" type="submit">Search
+                                    </button>
                                 </form>
                             </NavItem>
+                        </NavbarNav>
 
-                            <NavItem>
-                                <NavLink href="/components/">Sign Up</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="https://github.com/reactstrap/reactstrap">Log In</NavLink>
-                            </NavItem>
+                        <NavbarNav right>
+                            <div>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => this.signOut()}
+                                >
+                                    Sign Out
+                                </button>
 
-                        </Nav>
+                            </div>
+
+                        </NavbarNav>
+
                     </Collapse>
                 </Navbar>
-            </div>
+            </Router>
         );
     }
 }

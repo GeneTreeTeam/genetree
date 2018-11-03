@@ -1,10 +1,20 @@
 import React from 'react';
 import { Container, Row, Col, Input, Button, Fa, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact';
-import NarbarFeatures from "./NarbarFeatures";
 import FormsPage2 from "./Login";
-import { Link } from 'react-router-dom';
 
 import {firebaseApp} from "./firebase";
+
+import {
+    Navbar,
+    NavbarBrand,
+    NavbarNav,
+    NavbarToggler,
+    Collapse,
+    NavItem,
+    NavLink,
+    Dropdown,
+    DropdownToggle,
+   } from 'mdbreact';
 
 
 class FormsPage1 extends React.Component  {
@@ -27,6 +37,11 @@ class FormsPage1 extends React.Component  {
             modal: !this.state.modal
         });
     }
+    onClick(){
+        this.setState({
+            collapse: !this.state.collapse,
+        });
+    }
 
     SignUp(){
         console.log('this.state', this.state);
@@ -39,11 +54,11 @@ class FormsPage1 extends React.Component  {
 
     render() {
         return(
-            <Container>
+            <Container onClick={this.toggle}>
                 <Row>
                     <Col md="0">
-                        <Button color="info" onClick={this.toggle}>Sign Up <i className="fa fa-user-plus mr-1"></i></Button>
-                        <Modal isOpen={this.state.modal} toggle={this.toggle} className="cascading-modal">
+                        <Button color="info"  onClick={this.toggle}>Sign Up <i className="fa fa-user-plus mr-1"></i></Button>
+                        <Modal isOpen={this.state.modal}  className="cascading-modal">
                             <div className="modal-header primary-color white-text">
                                 <h4 className="title">
                                     <Fa className="fa fa-pencil" /> Sign Up</h4>
@@ -84,14 +99,13 @@ class FormsPage1 extends React.Component  {
                                 <div>{this.state.error.message}</div>
                             </ModalBody>
 
-                            <ModalFooter className="mx-5 pt-3 mb-1">
+                            <ModalFooter   className="mx-5 pt-3 mb-1">
                                 <Col md="12">
                                     <p className="font-small grey-text d-flex justify-content-center">Have an account?
-                                        <div><Link to={'/login'}>Login</Link></div>
+                                        <div > <FormsPage2/></div>
                                     </p>
                                 </Col>
                             </ModalFooter>
-
                         </Modal>
                     </Col>
                 </Row>

@@ -47,7 +47,7 @@ class TreeDisplay():
 				holder[counter] = selfNode
 				counter += 1
 			else:
-				inMe = input("Welcome! "+ selfNode.getName() + "! You can do the following: \n M - Add Mom \n D - Add Dad \n E - Edit Self (Does not work yet) \n P - Print Tree \n J - Move to Family Node \n L - List current Nodes \n Q - Quit \n")
+				inMe = input("Welcome! "+ selfNode.getName() + "! You can do the following: \n M - Add Mom \n D - Add Dad \n S - Add Sibling \n E - Edit Self (Does not work yet) \n P - Print Tree \n J - Move to Family Node \n L - List current Nodes \n Q - Quit \n")
 				inMe = inMe.upper()
 				if inMe == "M":
 					momNode = Person() 
@@ -78,11 +78,30 @@ class TreeDisplay():
 					holder[counter] = dadNode
 					selfNode.assignFather(dadNode)
 					counter += 1
+				elif inMe == "S":
+					sibNode = Person() 
+					name = input("Enter the sibling's first name. \n")
+					while name == "":
+						name = input("Enter the sibling's first name. \n")
+					surname = input("Enter the sibling's last name. \n")
+					while surname == "":
+						surname = input("Enter sibling's last name. \n")
+					gender = input("What is your gender? M or F? \n")
+					while (gender.upper() != "M" and gender.upper() != "F"):
+						gender = input("Gender entered incorrectly. What is your gender? M or F? \n")
+					sibNode.assignName(name)
+					sibNode.assignsurName(surname)
+					if gender.upper() is "M":
+						sibNode.assignGender(0)
+					else:
+						sibNode.assignGender(1)
+					selfNode.addSibling(sibNode)
 				elif inMe == "E":
 					print("You can change the following parameters: Your first name, last name, birthdate, gender, remove any parent, ethnicity")
 				elif inMe == "P":
 					print("The following is the ancestral tree for the current unit \n")
 					selfNode.displaySiblings()
+					print(selfNode.toJSON())
 				elif inMe == "J":
 					print("Options:", end="")
 					for position, node in holder.items():

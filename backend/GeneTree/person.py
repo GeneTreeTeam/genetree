@@ -1,6 +1,7 @@
 import datetime
 import time
 import json
+import jsonpickle
 from familyNode import family 
 from datetime import timedelta
 from datetime import datetime
@@ -11,15 +12,20 @@ class Person():
 		'name':"",
 		'surname':"",
 		'father': None,
+		'hasMom': 0,
+		'hasDad': 0,
 		'mother': None,
 		'dob': None,
 		'comment':[],
 		'isAccount': False,
-###		'children':[],
+		'children':[],
 		'uniqueId': random.choice(range(1, 100)),
 		'gender':0, ### 0 is Male, 1 is Female
 #		'matchmaker': None,
 		'ethnicity':"",
+		'birthdate':"",
+		'sibling': [],
+		'status': 0,
 		}
 
  
@@ -27,6 +33,7 @@ class Person():
 		month = random.choice(range(1, 13))
 		day = random.choice(range(1, 29))
 		self.userData['dob'] = datetime(year, month, day)
+		self.userData['birthdate'] = str(day) + "/" + str(month) + "/" + str(year)
 	def getName(self):
 		return self.userData['name']
 	def getSurname(self):
@@ -40,6 +47,14 @@ class Person():
 	def getDoB(self):
 		return self.userData['dob']
 
+	def addSibling(self,sibling):
+		dad = self.getDad()
+		mom = self.getMom()
+		sibling.assignFather(dad)
+		sibling.assignMother(mom)
+		self.userData['sibling'].append(sibling)
+		sibling.userData['sibling'].append(self)
+
 	def assignGender(self, gender):
 		self.userData['gender'] = gender
 
@@ -51,17 +66,21 @@ class Person():
 
 	def assignFather(self,fatherNew):
 		self.userData['father'] = fatherNew
-		#fatherNew.addChild(self)
+		self.userData['hasDad'] = 1
+		fatherNew.addChild(self)
 
 	def assignMother(self,motherNew):
 		self.userData['mother'] = motherNew
-		#motherNew.addChild(self)
+		self.userData['hasMom'] = 1
+		motherNew.addChild(self)
 	
 	def removeFather(self,fatherNew):
 		self.userData['father'] = None
+		fatherNew.removeChild()
 
 	def removeMother(self,motherNew):
 		self.userData['mother'] = None
+		motherNew.removeChild()
 	
 	def dobAssign(self,dobNew):
 		self.userData['dob'] = dobNew
@@ -91,35 +110,51 @@ class Person():
 		self.userData['comment'].append(commentNew)
 
 	def displaySiblings(self):
-		print("hello")
-		print(self.hasFather())
-		print(self.hasMother())
+#		print(self.hasFather()) #Get the list of children for both parents b4 recursion, perform a set.
+#		print(self.hasMother()) # To prevent duplicates, check the 
+
 		siblings = set()
+		siblings.add(self)
+		parents = ""
+		connection = ""
 		if self.hasFather() is True:
 			dad = self.userData['father']
-		#	dadsKids = dad.userData['children']
-			#for item in dadsKids:
-			#siblings.add(dad)
-			dad.displaySiblings()
-			print("Father of " + self.userData['name'] + " is " + str(dad))
+			dadsKids = dad.userData['children']
+			for item in dadsKids:
+					siblings.add(item)
+			
+#			print("Father of " + self.userData['name'] + " is " + str(dad))
 
 		if self.hasMother() is True:
 			mom = self.userData['mother']
-			#momsKids = mom.userData['children']
-#			for item in momsKids:
-	#		siblings.add(mom)
+			momsKids = mom.userData['children']
+			for item in momsKids:
+					siblings.add(item)
+			
+#			print("Mother of " + self.userData['name'] + " is " + str(mom))
+#		if self.hasFather() is False and self.hasMother() is False:
+#			print("Why")
+#			print(str(self) + " has no parents.")
+		if self.hasFather() is True:
+			dad.displaySiblings()
+			parents += dad.userData['name']
+		if self.hasMother() is True:
 			mom.displaySiblings()
-			print("Mother of " + self.userData['name'] + " is " + str(mom))
+			if self.hasFather() is True:
+				parents += " and " + mom.userData['name']
+				connection = " have the following children: "
+			else:
+				parents += mom.userData['name']
+				connection = " has the following children: "
+		else:
+			connection = " has the following children: "
 		if self.hasFather() is False and self.hasMother() is False:
-			print("Why")
 			print(str(self) + " has no parents.")
-#		if len(siblings) == 0:
-#			print(str(self) + "'s parents are non existent")
-#		else:
-#			print(str(self) + "'s parents are", end=" ")
-#			for item in siblings:
-#				print(item, end=" ")
-#		print()
+		else:
+			print(parents + connection)
+			for item in siblings:
+				print('\t' + item.userData['name'])
+		print()
 
 	def __str__(self):
 		return self.userData['name'] + " " + self.userData['dob'].strftime('%m/%d/%Y') + " " + str(self.userData['uniqueId'])
@@ -133,12 +168,11 @@ class Person():
 #		differentPerson.userData['matchmaker'] = newFam
 
 
-#	def addChild(self,newKid):
-#		if self.userData['matchmaker'] is None:
-#			self.userData['children'].append(newKid)
-#		else:
-#			self.userData['matchmaker'].addChildren(newKid)
-
+	def addChild(self,newKid):
+		self.userData['children'].append(newKid)
+			
+	def removeChild(self,newKid):	
+		self.userData['children'].remove(newKid)
 #	def showKids(self):
 #		if self.userData['matchmaker'] is None:
 #			### DO SOME FUNCTION CALL HERE TO DISPLAY THE CHILDREN IN A SINGLE NODE aka the self.userData['children']
@@ -151,8 +185,10 @@ class Person():
 		return hashIt
 
 	def __eq__(self, other):
-		return hash(self.userData) == hash(other.userData)
+		return hash(self) == hash(other)
 
 	def __ne__(self, other):
 		return not self == other # NOT `return not self.__eq__(other)`
+	def toJSON(self): 
+		return json.dumps(json.loads(jsonpickle.encode(self)),indent=4)
 

@@ -35,7 +35,10 @@ def findEntryDB(request):
     search = request.POST.get('email')
     for uid in all_users.shallow().get().each():
         inventory = all_users.child(uid).child("details").get()
-        if(search == inventory)
+        if(search == inventory):
+            print(search)
+            return
+    print("Entry not found!")
 
 def newEntryDB(request): #Add new non-existing users
     # passw = request.POST.get('pass')

@@ -63,7 +63,7 @@ def recover(request):
 	email = request.POST.get('email') 
 	passw = "blank"
 	try:
-		user= authe.create_user_with_email_and_password(email,passw)
+		user = authe.create_user_with_email_and_password(email,passw)
 	except:
 		message="Account does not, please check email"
 		return render(request,'forgot.html',{"mesg":message})

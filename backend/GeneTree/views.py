@@ -18,6 +18,7 @@ def signIn(request):
 	return render(request, 'home.html')
 
 def postSign(request):
+	# print (request)
 	email = request.POST.get('email')
 	passw = request.POST.get('pass')
 	try:

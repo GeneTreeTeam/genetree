@@ -15,9 +15,9 @@ class Person():
 		'dob': None,
 		'comment':[],
 		'isAccount': False,
-###		'children':[],
+#		'children':[],
 		'uniqueId': random.choice(range(1, 100)),
-		'gender':0, ### 0 is Male, 1 is Female
+		'gender':0, ### 0 is Male, 1 is Female #Change to M and F
 #		'matchmaker': None,
 		'ethnicity':"",
 		}
@@ -27,6 +27,7 @@ class Person():
 		month = random.choice(range(1, 13))
 		day = random.choice(range(1, 29))
 		self.userData['dob'] = datetime(year, month, day)
+		
 	def getName(self):
 		return self.userData['name']
 	def getSurname(self):
@@ -94,7 +95,7 @@ class Person():
 		print("hello")
 		print(self.hasFather())
 		print(self.hasMother())
-		siblings = set()
+		#siblings = set()
 		if self.hasFather() is True:
 			dad = self.userData['father']
 		#	dadsKids = dad.userData['children']

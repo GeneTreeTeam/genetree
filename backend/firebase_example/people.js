@@ -8,7 +8,7 @@ import firebase from './firebase'
 //
 // id:user_email
 // |-people
-// | |-id:'USER'
+// | |-id:0
 // | | |name:user_name
 // | | |email:user_email
 // | |-id:mother_id
@@ -20,11 +20,11 @@ import firebase from './firebase'
 // |-relationships
 //   |-id:r1_id
 //   | |-type:'mother'
-//   | |-child:'USER'
+//   | |-child:0
 //   | |-parent:mother_id
 //   |-id:r2_id
 //   | |-type:'father'
-//   | |-child:'USER'
+//   | |-child:0
 //   | |-parent:father_id
 //   |-id:r1_id
 //   | |-type:'mother'
@@ -154,14 +154,15 @@ export default class Person {
 
 export const read = () => {
   return entry().get().then(function(doc) {
-    var user = null
     var people = {}
+    var id = 0
     for (pinfo in doc.data().people) {
       // TODO fix attribute parsing
-      people[id] = Person(people, pinfo.name, pinfo.email, pinfo.id)
+      people[id] = Person(people, pinfo.name, pinfo.email, id)
+      id ++
     }
     var relationships = []
-    for rinfo in doc.data().relationships) {
+    for (rinfo in doc.data().relationships) {
       switch(rinfo.type) {
         case 'mother':
           people[rinfo.child].setMother(people[rinfo.parent])
@@ -181,11 +182,10 @@ export const read = () => {
 // Function to sign up
 export const signUp = (username, email, password) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
+  var ppl = {}
+  ppl[0] = {name: username, email: email}
   db().doc(email).set({
-    people: {
-      id: 'USER', // TODO make this the key
-      name: username
-    },
+    people: ppl,
     relationships: {}
   })
 }

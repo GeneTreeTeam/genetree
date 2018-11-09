@@ -46,23 +46,23 @@ def newEntryDB(request): #Add new non-existing users
     email = "email@gmail.com"
     passw = "john123"
 
-    try:
-        user= authe.create_user_with_email_and_password(email,passw) #TODO: check firebase if user already exist
-    except:
-        message="Entry exists"
+    # try:
+    #     user= authe.create_user_with_email_and_password(email,passw) #TODO: check firebase if user already exist
+    # except:
+    #     message="Entry exists"
 
     uid = user['localId']
     database.child("users").child(uid).set(data)
     #TODO use actual data not existing json
 
 def readDB(request): #assuming request has UID
-    try:
-        pInfo = database.get(request.POST.get('UID'))
-    except:
-        message="Database non-existant!"
-        return render(request, 'home.html',{"mesg":message})
+    # try:
+    #     pInfo = database.get(request.POST.get('UID'))
+    # except:
+    #     message="Database non-existant!"
+    #     return render(request, 'home.html',{"mesg":message})
 
-    return render()
+    # return render()
 
 
 #Uopdate existing user or Add new detail fields

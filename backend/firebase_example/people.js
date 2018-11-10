@@ -1,11 +1,7 @@
 import firebase from './firebase'
 
-// Contains stuff for the front end to import so they don't have to deal with
-// JSON manipulation after all.
+// Frontend uses JS instead of JSON now
 
-// Flat schema actually works better here, especially for weird-shaped trees.
-// It's a lot easier to maintain in the long run.
-//
 // id:user_email
 // |-people
 // | |-id:0
@@ -36,7 +32,6 @@ import firebase from './firebase'
 //     |-parent:father_id
 
 
-// Utility functions
 function user() {
   return firebase.auth().currentUser
 }
@@ -49,11 +44,9 @@ function entry() {
 
 
 // Person class for object-oriented model.
-// Add relationships with setMother, setFather, setAsMother, and setAsFather.
-// When creating a Person manually, make sure the supplied id is unique.
+
 export default class Person {
-  constructor(people, name, email, id) {
-    this.people = people
+  constructor(people, name, email, id) { //id must be unique
     this.mother = null
     this.father = null
     this.children = []
@@ -84,8 +77,8 @@ export default class Person {
     return this.id
   }
 
-  // These take Person objects as parameters.
-  // (preferred method of external access)
+  // Add relationships with setMother, setFather, setAsMother, and setAsFather.
+
   setMother(mother) {
     if (self.mother !== mother) {
       if (self.mother) {
@@ -97,6 +90,7 @@ export default class Person {
       self.mother = mother
     }
   }
+
   setFather(father) {
     if (self.father !== father) {
       if (self.father) {
@@ -114,8 +108,8 @@ export default class Person {
   setAsFather(child) {
     child.setFather(this)
   }
-  remove() {
-    // remove references to this as parent
+  //Remove this Person from all relationships AND the list of people.
+  remove(people) {    //delete person
     for (child in this.children) {
       if (child.getMother() === this) {
         child.setMother(null)
@@ -127,7 +121,9 @@ export default class Person {
     mother.removeChild(this)
     father.removeChild(this)
     // remove references to this as person
-    people.remove(this.id)
+    if (people) {
+      people.remove(this.id)
+    }
   }
 
   // Does not set this object as the child's mother or father
@@ -159,7 +155,7 @@ export const read = () => {
     for (pinfo in doc.data().people) {
       // TODO fix attribute parsing
       people[id] = Person(people, pinfo.name, pinfo.email, id)
-      id ++
+      id++
     }
     var relationships = []
     for (rinfo in doc.data().relationships) {
@@ -179,7 +175,7 @@ export const read = () => {
 }
 
 
-// Function to sign up
+// Function to create new user
 export const signUp = (username, email, password) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
   var ppl = {}

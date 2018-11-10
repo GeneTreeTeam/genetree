@@ -43,14 +43,11 @@ function entry() {
 }
 
 
-// Person class for object-oriented model.
-
 export default class Person {
-  constructor(people, name, email, id) { //id must be unique
+  constructor(people, name, email, id) { //id supplied must be unique
     this.mother = null
     this.father = null
     this.children = []
-
     this.name = info.name
     this.email = info.email
     this.id = info.id
@@ -77,7 +74,7 @@ export default class Person {
     return this.id
   }
 
-  // Add relationships with setMother, setFather, setAsMother, and setAsFather.
+  //set relationships
 
   setMother(mother) {
     if (self.mother !== mother) {
@@ -90,7 +87,6 @@ export default class Person {
       self.mother = mother
     }
   }
-
   setFather(father) {
     if (self.father !== father) {
       if (self.father) {
@@ -108,7 +104,7 @@ export default class Person {
   setAsFather(child) {
     child.setFather(this)
   }
-  //Remove this Person from all relationships AND the list of people.
+  //Remove this Person from all relationships(via children) AND database.
   remove(people) {    //delete person
     for (child in this.children) {
       if (child.getMother() === this) {
@@ -117,20 +113,19 @@ export default class Person {
         child.setFather(null)
       }
     }
-    // remove references to this as child
+    
     mother.removeChild(this)
     father.removeChild(this)
-    // remove references to this as person
+    
     if (people) {
       people.remove(this.id)
     }
   }
 
-  // Does not set this object as the child's mother or father
-  // (external use discouraged)
+  //Only creates child does not set relationship (external use complex so avoid)
   addChild(child) {
-    for (c in children) { // loop is faster than built-in functinons?!
-      if (c === child) { // if child was already there
+    for (c in children) {
+      if (c === child) {  //checks existing children for duplicacy
         return false
       }
     }
@@ -144,16 +139,15 @@ export default class Person {
         return true
       }
     }
-    return false // if child wasn't there
+    return false //child not found
   }
 }
 
-export const read = () => {
+export const read = () => {   //assuming already logged in
   return entry().get().then(function(doc) {
     var people = {}
     var id = 0
     for (pinfo in doc.data().people) {
-      // TODO fix attribute parsing
       people[id] = Person(people, pinfo.name, pinfo.email, id)
       id++
     }
@@ -166,7 +160,7 @@ export const read = () => {
         case 'father':
           people[rinfo.child].setFather(people[rinfo.parent])
           break;
-        default: // for debug
+        default:
           console.warn('Unrecognized relationship: '+rinfo.type)
       }
     }
@@ -175,9 +169,10 @@ export const read = () => {
 }
 
 
-// Function to create new user
+//Function to create new user who is member (non memebers created using addChild)
 export const signUp = (username, email, password) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
+  console.log("It made me.")
   var ppl = {}
   ppl[0] = {name: username, email: email}
   db().doc(email).set({
@@ -186,11 +181,10 @@ export const signUp = (username, email, password) => {
   })
 }
 
-// Function to log in
 export const logIn = (email, password) =>
   firebase.auth().signInWithEmailAndPassword(email, password)
 
-// Function to log out
+
 export const logOut = () =>
   firebase.auth().signOut()
 
@@ -198,26 +192,27 @@ export const logOut = () =>
 export const pwdReset = (email) =>
   firebase.auth().sendPasswordResetEmail(email)
 
-// Function to change password while logged in
+// Function to change password assuming logged in
 export const pwdChange = (password) =>
   user().updatePassword(password)
 
+//Write member info to database
 export const write = (people) => {
   var rels = {}
   var ppl = {}
   for (person in people) {
     mother = person.getMother()
-    if (mother) { // if this person has a mother
+    if (mother) { //if has mother
       relate(i, 'mother', person.getID(), mother.getID(), rels)
     }
     father = person.getFather()
-    if (father) { // if this person has a father
+    if (father) { //if has a father
       relate(i, 'father', person.getID(), father.getID(), rels)
     }
     for (child in person.getChildren()) {
-      if (child.getMother() === person) { // if this person is the mother
+      if (child.getMother() === person) { // if is mother
         relate('mother', child.getID(), person.getID(), rels)
-      } else if (child.getFather() == person) { // if this person is the father
+      } else if (child.getFather() == person) { // if is father
         relate('father', child.getID(), person.getID(), rels)
       }
     }
@@ -225,12 +220,16 @@ export const write = (people) => {
   }
   entry().set({people: ppl, relationships: rels})
 }
+
+//stores type of relationship
 const relate = (type, childID, parentID, rels) => {
   key = relationKeyGen(type, childID, parentID)
   if (!(key in rels)) { // efficiency can go stick its head in a pig
     rels[key] = {type: type, child: childID, parent: parentID}
   }
 }
+
+//determines relationship
 const relationKeyGen = (type, childID, parentID) => {
   return `{type}:{childID}:{parentID}`
 }

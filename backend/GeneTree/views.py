@@ -2,6 +2,7 @@ from django.views.generic import ListView
 from django.shortcuts import render
 import pyrebase
 from django.contrib import auth
+from . import person
 # Create your views here.
 config = {
 'apiKey': "AIzaSyBMVKmYH4nxqRTahVl-_M1INoiG-4abL-E",
@@ -46,6 +47,7 @@ def postSignUp(request):
 	passw = request.POST.get('pass') 
 	ethnic = request.POST.get('ethnic') 
 	dob = request.POST.get('birth')
+	gender = request.POST.get('gender')
 	try:	
 		user= authe.create_user_with_email_and_password(email,passw)
 		
@@ -53,7 +55,7 @@ def postSignUp(request):
 		message="Sign up failed, email already exists"
 		return render(request,"signUp.html",{"mesg":message})
 	uid = user['localId']
-	data = {"name":name, "status":"1","ethnicity":ethnic,"DoB":dob}
+	data = {"name":name, "status":"1","ethnicity":ethnic,"DoB":dob,"gender":gender,}
 
 	database.child("users").child(uid).child("details").set(data)
 	return render(request,"home.html")

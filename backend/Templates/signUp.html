@@ -24,9 +24,11 @@
     <input type="ethnicity" required="required" name="ethnic"><br><br>
     <div>
         <label for="birth">Date of Birth :</label>
-        <input type="date" required="required" id="birth" name="birth"/>
+        <input type="date" required="required" id="birth" name="birth"/> <br><br>
     </div>
-
+    Gender :
+    <input type="radio" name="gender" value="0" checked="yes"/> : Male 
+    <input type="radio" name="gender" value="1" /> : Female<br />
     <input type="submit" value="Sign Up">
     <button type="button" onclick="location.href='{% url 'signin' %}'">Cancel</button>
   </form>

@@ -1,0 +1,17 @@
+ {
+ 'gender': 'female', 
+ 'name': 'Ann', 
+ 'tree': {
+ 			'hid': '7oIXh4VaqVOI63dua0uvVrDLQmD3'
+ 		}
+ }, 'father': 1}, 
+ {'-LR8KJSfp_5fs3E36t70': {'gender': 'male', 'name': 'Duncan', 'tree': {'hid': -3790636874920510739}}
+
+
+
+
+
+ NAVBAR  - JS 
+ read and write takes care about how relationships are used.
+ FRONT END IS ONLY READ AND WRITE
+ One more thing: when you try to get the database the one you created. Last time you were using my database

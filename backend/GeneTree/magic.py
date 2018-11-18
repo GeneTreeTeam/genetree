@@ -112,9 +112,10 @@ def assignFather(user,currentHash,dadName):
 	ide = hash(dadName) + hash("male")
 	tree = {}
 	tree['hid'] = ide
-	data = {"name":dadName, "tree":tree,"gender": "male","id":blah}
+	data = {"name":dadName,"gender": "male","id":blah}
 	relation = {"father": blah}
-	database.child("users").child(uid).child(blah).push(data)
+	for item, item2 in data.items():
+		database.child("users").child(uid).child(blah).child(str(item)).push(str(item2))
 	database.child("users").child(uid).child(currentHash).update(relation)
 def assignMother(user,currentHash,dadName):
 	uid = user['localId']
@@ -130,9 +131,10 @@ def assignMother(user,currentHash,dadName):
 	ide = hash(dadName) + hash("female")
 	tree = {}
 	tree['hid'] = ide
-	data = {"name":dadName, "tree":tree,"gender": "female","id":blah}
+	data = {"name":dadName,"gender": "female","id":blah}
 	relation = {"mother": blah}
-	database.child("users").child(uid).child(blah).push(data)
+	for item, item2 in data.items():
+		database.child("users").child(uid).child(blah).child(str(item)).push(str(item2))
 	database.child("users").child(uid).child(currentHash).update(relation)
 def getRootHash(user):
 	uid = user['localId']
@@ -161,7 +163,7 @@ def postSignUp(name,email,passW,gender):
 	
 	data = {"name":name, "tree":tree,"gender": gender, "id":0}
 	for item, item2 in data.items():
-		database.child("users").child(uid).child(0).child(item).push(item2)
+		database.child("users").child(uid).child(0).child(str(item)).push(str(item2))
 	print("Signed Up")
 
 def recover(request):
